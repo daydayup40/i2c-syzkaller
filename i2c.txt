@@ -2,9 +2,11 @@
 # Use of this source code is governed by Apache 2 LICENSE that can be found in the LICENSE file.
 
 include <uapi/linux/i2c-dev.h>
+include <uapi/linux/i2c.h>
 
 resource fd_i2c[fd]
 
+define I2C_MAX_BLOCK	(I2C_SMBUS_BLOCK_MAX + 2)
 # There seems to be nothing special we can do with this fd.
 syz_open_dev$I2C(dev ptr[in, string["/dev/i2c-#"]], id intptr, flags flags[open_flags]) fd_i2c
 
@@ -21,16 +23,12 @@ i2c_smbus_ioctl_data {
 	read_write	int8
 	command		int8
 	size		int32
-	data		ptr[in, i2c_smbus_data]
-}
-
-i2c_smbus_data {
-	block	array[int8, 34]
+	data		array[int8, 34]
 }
 
 i2c_rdwr_ioctl_data {
-	nmsgs	int32
 	msgs	ptr[in, i2c_msg]
+	nmsgs	int32
 }
 
 i2c_msg {
