@@ -8,7 +8,37 @@ resource fd_i2c[fd]
 # There seems to be nothing special we can do with this fd.
 syz_open_dev$I2C(dev ptr[in, string["/dev/i2c-#"]], id intptr, flags flags[open_flags]) fd_i2c
 
-ioctl$I2CRETRIES(fd fd_i2c, cmd const[I2C_RETRIES], arg intptr)
-ioctl$I2CTIMEOUT(fd fd_i2c, cmd const[I2C_TIMEOUT], arg intptr)
-ioctl$I2CSLAVE(fd fd_i2c, cmd const[I2C_SLAVE], arg intptr)
-ioctl$I2CSLAVE_FORCE(fd fd_i2c, cmd const[I2C_SLAVE_FORCE], arg intptr)
+ioctl$I2C_RETRIES(fd fd_i2c, cmd const[I2C_RETRIES], arg intptr)
+ioctl$I2C_TIMEOUT(fd fd_i2c, cmd const[I2C_TIMEOUT], arg intptr)
+ioctl$I2C_SLAVE(fd fd_i2c, cmd const[I2C_SLAVE], arg intptr)
+ioctl$I2C_SLAVE_FORCE(fd fd_i2c, cmd const[I2C_SLAVE_FORCE], arg intptr)
+ioctl$I2C_TENBIT(fd fd_i2c, cmd const[I2C_TENBIT], arg intptr)
+ioctl$I2C_PEC(fd fd_i2c, cmd const[I2C_PEC], arg intptr)
+
+ioctl$I2C_FUNCS(fd fd_i2c, cmd const[I2C_FUNCS], arg ptr[in, intptr])
+
+i2c_smbus_ioctl_data {
+	read_write	int8
+	command		int8
+	size		int32
+	data		ptr[in, i2c_smbus_data]
+}
+
+i2c_smbus_data {
+	block	array[int8, 34]
+}
+
+i2c_rdwr_ioctl_data {
+	nmsgs	int32
+	msgs	ptr[in, i2c_msg]
+}
+
+i2c_msg {
+	addr	int16
+	flags	int16
+	len	int16
+	buf	ptr[in, int8]
+}
+
+ioctl$I2C_RDWR(fd fd_i2c, cmd const[I2C_RDWR], arg ptr[in, i2c_rdwr_ioctl_data])
+ioctl$I2C_SMBUS(fd fd_i2c, cmd const[I2C_SMBUS], arg ptr[in, i2c_smbus_ioctl_data])
