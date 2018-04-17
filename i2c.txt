@@ -35,13 +35,15 @@ i2c_smbus_data [
 ]
 
 i2c_rdwr_ioctl_data {
-	msgs	ptr[in, i2c_msg]
-	nmsgs	int32
+	msgs	ptr[in, array[i2c_msg]]
+	nmsgs	len[msgs, int32]
 }
 
 i2c_msg {
 	addr	int16
-	flags	int16
-	len	int16
-	buf	ptr[in, int8]
+	flags	flags[i2c_msg_flags, int16]
+	len	len[buf, int16]
+	buf	array[int8]
 }
+
+i2c_msg_flags = I2C_M_RD, I2C_M_TEN, I2C_M_DMA_SAFE, I2C_M_RECV_LEN, I2C_M_NO_RD_ACK, I2C_M_IGNORE_NAK, I2C_M_REV_DIR_ADDR, I2C_M_NOSTART, I2C_M_STOP
