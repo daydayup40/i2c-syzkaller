@@ -1,0 +1,14 @@
+# Copyright 2015 syzkaller project authors. All rights reserved.
+# Use of this source code is governed by Apache 2 LICENSE that can be found in the LICENSE file.
+
+include <uapi/linux/i2c-dev.h>
+
+resource fd_i2c[fd]
+
+# There seems to be nothing special we can do with this fd.
+syz_open_dev$I2C(dev ptr[in, string["/dev/i2c-#"]], id intptr, flags flags[open_flags]) fd_i2c
+
+ioctl$I2CRETRIES(fd fd_i2c, cmd const[I2C_RETRIES], arg intptr)
+ioctl$I2CTIMEOUT(fd fd_i2c, cmd const[I2C_TIMEOUT], arg intptr)
+ioctl$I2CSLAVE(fd fd_i2c, cmd const[I2C_SLAVE], arg intptr)
+ioctl$I2CSLAVE_FORCE(fd fd_i2c, cmd const[I2C_SLAVE_FORCE], arg intptr)
